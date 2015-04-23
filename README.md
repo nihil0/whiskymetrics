@@ -18,7 +18,7 @@ The other WhiskyMetrics scripts interface with this database.
 ### Scrape, Scrub and Fextract
 Whiskymetrics' key functionalities are implemented by these scripts.
 
-1. `scrape.py` is an executable script which queries the database for post IDs associated with the distillery, region or whisky specified in the input, gets the reddit comment with said post IDs and stores the comment text in .txt files whose names are the same as the post IDs. The files are stored in a directory named`{whisky|distillery|region}_<whisky_name>`. 
+`scrape.py` is an executable script which queries the database for post IDs associated with the distillery, region or whisky specified in the input, gets the reddit comment with said post IDs and stores the comment text in .txt files whose names are the same as the post IDs. The files are stored in a directory named`{whisky|distillery|region}_<whisky_name>`. 
 
 Usage:
 ```
@@ -33,7 +33,7 @@ optional arguments:
                   a particular whisky. Is set to 3 by default.
 ```
 
-2. `scrub.py` Processes the review files creates by the scrapereviews command of the Wiskymetrics toolkit. All text is converted to lowercase and special characters are removed. The script takes as its input a folder name, processes all text files in it and adds a SCRUBBED flag to the METADATA file.
+`scrub.py` Processes the review files creates by the scrapereviews command of the Wiskymetrics toolkit. All text is converted to lowercase and special characters are removed. The script takes as its input a folder name, processes all text files in it and adds a SCRUBBED flag to the METADATA file.
 
 Usage: 
 ```
@@ -47,7 +47,7 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
-3. `fextract.py` iterates through the files in the folder created by scrape.py and extracts term frequencies (TF) of words associated with four whisky characteristics, namely, colour, nose, taste and finish. The data are stored in JSON in a directory called JsonDumps. The JSON files have the same name as the folder specified in the command line argument.
+`fextract.py` iterates through the files in the folder created by scrape.py and extracts term frequencies (TF) of words associated with four whisky characteristics, namely, colour, nose, taste and finish. The data are stored in JSON in a directory called JsonDumps. The JSON files have the same name as the folder specified in the command line argument.
 
 Usage:
 ```
@@ -59,3 +59,4 @@ positional arguments:
 optional arguments:
   -h, --help  show this help message and exit
 ```
+The above scripts can also be imported as modules. 
