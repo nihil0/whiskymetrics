@@ -21,7 +21,8 @@ Whiskymetrics' key functionalities are implemented by these scripts.
 1. `scrape.py` is an executable script which queries the database for post IDs associated with the distillery, region or whisky specified in the input, gets the reddit comment with said post IDs and stores the comment text in .txt files whose names are the same as the post IDs. The files are stored in a directory named`{whisky|distillery|region}_<whisky_name>`. 
 
 Usage:
-```scrape.py [-h] [--type {1,2,3}] search_string
+```
+scrape.py [-h] [--type {1,2,3}] search_string
 positional arguments:
   search_string   Whisky, region or ditillery you want to get reviews of.
 
