@@ -47,7 +47,7 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 
-`fextract.py` iterates through the files in the folder created by scrape.py and extracts term frequencies (TF) of words associated with four whisky characteristics, namely, colour, nose, taste and finish. The data are stored in JSON in a directory called JsonDumps. The JSON files have the same name as the folder specified in the command line argument.
+`fextract.py` iterates through the files in the folder created by scrape.py and extracts term frequencies (TF) of words associated with four whisky characteristics, namely, colour, nose, taste and finish. The data are stored in a JSON file in a directory called JsonDumps. The JSON file is named `<dir_name>.json`. 
 
 Usage:
 ```
