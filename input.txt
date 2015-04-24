@@ -2,19 +2,5 @@
 # Put the whiskies you want analysed in this file. 
 # One per line
 #
-glenlivet 12
-macallan 12 sherry
-glenfiddich 12
-balvenie 12 doublewood
-bunnahabhain 12
-talisker 10
-ancnoc 12
 bowmore 12
-ardbeg 10
-lagavulin 16
-caol ila 12
-highland park 12
-auchentoshan three wood
-clynelish 14
-laphroaig quarter cask
 

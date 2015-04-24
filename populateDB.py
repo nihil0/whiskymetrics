@@ -30,7 +30,7 @@ def rowParse(row):
     result = list();
 
     # Extract region
-    region = row[4].strip().lower();
+    region = row[5].strip().lower();
     # We are only interested in single malt Scotch
     if region in set(['lowland','speyside','highland','island','islay','campbeltown']):
         # Extract name
@@ -48,9 +48,9 @@ def rowParse(row):
         result.append(postID);
 
         # Extract score
-        if row[6]:
-            result.append(int(row[6].strip()));
-        else:
+        try:
+            result.append(int(row[4].strip()));
+        except ValueError:
             result.append(None);
 
     return result
@@ -107,7 +107,7 @@ def main():
             count+=1;
 
     numRecords = c.execute("select count(*) from review").next();
-    print str(numRecords[0])+" entires have been added to table 'review' in 'singlemalt.db'."
+    print ' '+str(numRecords[0])+" entires have been added to table 'review' in 'singlemalt.db'."
 
     dbConn.close();
 

@@ -9,7 +9,7 @@ class WhiskyBot(praw.Reddit):
     Iherits from the praw.Reddit class.
     """
     def __init__(self):
-        praw.Reddit.__init__(self,'WhiskyBot');
+        praw.Reddit.__init__(self,'WhiskyB0t');
 
     def getReviewtext(self,postID):
         """
