@@ -60,3 +60,6 @@ optional arguments:
   -h, --help  show this help message and exit
 ```
 The above scripts can also be imported as modules. 
+
+### Testing WhiskyMetrics
+After you have cloned this repo and completed the setup, run `Test.py`. If it fails to run, send me a bug report, or better yet, fix the bug and send me a pull request. Remember to update `AUTHORS` accordingly. 
