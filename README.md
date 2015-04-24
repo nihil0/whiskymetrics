@@ -40,7 +40,7 @@ Usage:
 scrub.py [-h] dir_name
 
 positional arguments:
-  dir_name    Name of the DATA_* folder containing the review files to be
+  dir_name    Name of the folder containing the review files created by scrape.py to be
               scrubbed.
 
 optional arguments:
