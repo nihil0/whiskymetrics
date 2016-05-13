@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 
 #Import required modules
@@ -11,7 +11,7 @@ class WhiskyBot(praw.Reddit):
     def __init__(self):
         praw.Reddit.__init__(self,'WhiskyB0t')
 
-    def getReviewtext(self,postID):
+    def get_review_text(self,postID):
         """
         Get review text from reddit given post ID.
         """
@@ -19,6 +19,8 @@ class WhiskyBot(praw.Reddit):
         try:
             firstComment = submission.comments[0]
         except:
+            # TODO: indentify exception types. There are a million things
+            # that can go wrong here.
             print('\nReceived bad data from reddit. Skipping...')
             return ''
         else:
@@ -37,7 +39,7 @@ def main(name,choice):
     # Fetch post IDs from the database
     if choice == 1:
         analyseBy = 'distillery'
-        rec = c.execute('select postID from review where name like ?',[name.lower()+'%']).fetchall();
+        rec = c.execute('SELECT postID FROM review WHERE name LIKE ?',[name.lower()+'%']).fetchall();
         nRec = c.execute('select count(postID) from review where name like ?',[name.lower()+'%']).fetchone()[0]
     elif choice == 2:
         analyseBy = 'region'
@@ -85,11 +87,11 @@ def main(name,choice):
                 reviewComment = w.getReviewtext(postID).encode('ascii','ignore')
                 f.write(reviewComment)
         else:
-            print "\nField empty. Skipping..."
+            print( "\nField empty. Skipping...")
 
         count+=1
 
-    print "\nDone!\n"
+    print ("\nDone!\n")
     # Close database connection
     dbConn.close()
 
