@@ -7,4 +7,4 @@ url="https://docs.google.com/spreadsheets/d/$id/export?format=csv&id=$id"
 
 wget --output-document="whisky_reviews.csv" $url
 
-python populateDB.py
+sqlite3 whisky.db < dbschema.sql
