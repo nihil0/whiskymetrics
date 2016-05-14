@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS review (
     timestamp text,
     name text,
     reviewer text,
-    linktopost text,
+    url text,
     score text,
     type text,
     price text,
@@ -13,4 +13,14 @@ CREATE TABLE IF NOT EXISTS review (
 
 .separator ,
 .import whisky_reviews.csv review
+
+CREATE TABLE IF NOT EXISTS distilleries (
+    distillery text,
+    location text,
+    region text,
+    status text
+    );
+
+.separator ,
+.import distilleries.csv distilleries
 
