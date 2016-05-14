@@ -59,3 +59,7 @@ target/
 # Database and CSV files
 *.db
 *.csv
+
+# Exception for static
+!static/whisky.db
+
