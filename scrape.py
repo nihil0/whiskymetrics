@@ -26,6 +26,50 @@ class WhiskyBot(praw.Reddit):
         else:
             return firstComment.body
 
+class WhiskyDB():
+    '''
+    Class to interact with WhiskyMetrics' database.
+    '''
+    def __init__(self,path_to_db):
+        self.dbconn = sqlite3.connect(path_to_db)
+        self.crsr = self.dbconn.cursor()
+
+    def get_post_links(self,name=None,distillery=None,region=None):
+        '''
+        Yields a generator of urls for all reviews that match one of the input
+        criteria.
+
+        Args:
+            name: name of a specific whisky, e.g., Balvenie 12
+
+            distillery: name of a distillery, e.g., Glenlivet (Leave out "The")
+
+            region: Any of the main whisky producing regions of Scotland. E.g.,
+                Islay, Highland, Campbeltown etc. Remove the s from Highlands
+                and Lowlands
+
+        Returns:
+            A generator of urls
+
+        Raises:
+            ValueError id no inputs are given
+        '''
+
+        if name:
+            query="SELECT url FROM review WHERE name='"+name+"';"
+            rec = self.crsr.execute(query)
+            return (m[0] for m in rec)
+        elif distillery:
+            query="SELECT url FROM review WHERE name like '"+distillery+"%';"
+            rec = self.crsr.execute(query)
+            return (m[0] for m in rec)
+        elif region:
+            query="SELECT url FROM review WHERE type='"+region+"';"
+            rec = self.crsr.execute(query)
+            return (m[0] for m in rec)
+        else:
+            raise(ValueError,'Missing input!')
+
 def main(name,choice):
     ##############################################################################
     # Main:
