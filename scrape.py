@@ -11,11 +11,17 @@ class WhiskyBot(praw.Reddit):
     def __init__(self):
         praw.Reddit.__init__(self,'WhiskyB0t')
 
-    def get_review_text(self,postID):
+    def get_review_text(self,post_id=None,url=None):
         """
-        Get review text from reddit given post ID.
+        Get review text from reddit given post ID or url to reddit post.
         """
-        submission = self.get_submission(submission_id=postID)
+        if post_id:
+            submission = self.get_submission(submission_id=post_id)
+        elif url:
+            submission = self.get_submission(url)
+        else:
+            raise(ValueError,'No input given!')
+
         try:
             firstComment = submission.comments[0]
         except:
