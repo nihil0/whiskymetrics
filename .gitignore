@@ -63,3 +63,5 @@ target/
 # Exception for static
 !static/whisky.db
 
+# Ignore demo_ files
+demo_*

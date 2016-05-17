@@ -55,7 +55,7 @@ class WhiskyDB():
                 and Lowlands
 
         Returns:
-            A generator of urls
+            A generator of names and urls
 
         Raises:
             ValueError id no inputs are given
@@ -70,8 +70,7 @@ class WhiskyDB():
         else:
             raise(ValueError,'Missing input!')
 
-        rec=self.crsr.execute(query)
-        return (m[0] for m in rec)
+        return self.crsr.execute(query)
 
 
 
