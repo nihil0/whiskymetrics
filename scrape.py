@@ -2,7 +2,7 @@
 
 
 #Import required modules
-import praw,sqlite3,os,argparse,time,utils
+import praw,sqlite3
 
 class WhiskyBot(praw.Reddit):
     """
@@ -42,7 +42,7 @@ class WhiskyDB():
 
     def get_post_links(self,name=None,distillery=None,region=None):
         '''
-        Yields a generator of urls for all reviews that match one of the input
+        Returns a generator of urls for all reviews that match one of the input
         criteria.
 
         Args:
