@@ -1,68 +1,93 @@
 #!/usr/bin/env python
+# coding: utf-8
 """
-Processes the review files creates by the scrape command of the Wiskymetrics
-toolkit. All text is converted to lowercase and special characters are removed.
-This is the final stage before the text-mining algorithms begin their work.
+    ===================
+    WhiskyMetrics.scrub
+    ===================
 
-The script takes as its input a DATA_* folder, processes all text files in it
-and adds a SCRUBBED flag to the METADATA file.
+    Functions for cleaning raw review data returned by :class:`scrape.WhiskyBot`
 
+    :copyright: 2016 Neelabh Kashyap, see AUTHORS for more details
+    :license: MIT, see LICENSE for more details
 """
+import re, nltk
+from nltk.tokenize import wordpunct_tokenize
+from nltk.corpus import stopwords
+import numpy as np
 
-import argparse, os, glob, re, utils
+# Add NLTK datadir
+nltk.data.path.append('/l/nltk_data')
 
-def main(dirName):
-    # Create a list of all files in the directory
-    fileList =  glob.glob(os.path.join(dirName,'*.txt'))
+def clean(string):
+    '''
+    Removes all special characters keeeping only alphanumerics and newlines.
+    Also converts everything to lowercase.
+    '''
+    return re.sub('[^A-Za-z0-9 \n]+','',string).lower()
 
-    # Iterate through the list
-    for line in fileList:
-        msg = 'Cleaning raw data. {0:.2f}% complete.'.format(((fileList.index(line)+1.0)/len(fileList))*100)
-        utils.printStatus(msg)
-        with open(line,'r') as f:
-            reviewText = f.readlines()
+def tokenize(string):
+    '''
+    Returns a list of word tokens after removing stop words
+    '''
 
-        with open(line,'w') as f:
-            for row in reviewText:
-                # Convert to lower case and remove special characters
-                newRow = re.sub('[^A-Za-z0-9 \n]+','',row).lower()
-                f.write(newRow)
+    tokens = wordpunct_tokenize(string);
+    stop_words = stopwords.words('english')
+    return [word for word in tokens if word not in stop_words]
 
+def represent(segments,whisky_name):
+    '''
+    Returns a 5-D vector representation of a list of strings in ``segments``
+    based on the algorithm described below.
 
-    # Add SCRUBBED flag to the METADATA file
-    fileName = os.path.join(dirName,'metadata')
+    Each element of the vector is a 1 or 0 depending on presence or absence of
+    the following keywords, respectively:
+    ``whisky_name, color, nose, taste, finish.``
+    '''
 
-    with open(fileName,'a') as f:
-        f.write('SCRUBBED = 1')
-    print "\nDone!"
+    keywords = ['name','color','nose','taste','finish']
 
-if __name__ == '__main__':
+    regex_lookup = {'name':whisky_name,
+             'color':'(colo(u)?r|appearance)',
+             'nose':'nose',
+             'taste':'(taste|palate|mouth)',
+             'finish':'finish'
+             }
 
-    # Command-line Interface
-    cliParser = argparse.ArgumentParser(description =
-    """
-    Processes the review files creates by the scrapereviews command of the Wiskymetrics
-    toolkit. All text is converted to lowercase and special characters are removed.
-    This is the final stage before the text-mining algorithms begin their work.
+    vector_space = list()
 
-    The script takes as its input a folder name, processes all text files in it
-    and adds a SCRUBBED flag to the METADATA file.
-
-    """)
-
-    cliParser.add_argument('dir_name',help='Name of the folder containing \
-    the review files to be scrubbed.')
-
-    userArg = cliParser.parse_args()
-
-    dirName = userArg.dir_name
-
-    main(dirName)
-
-
+    for piece in segments:
+        v = np.zeros(len(keywords))
+        for k in keywords:
+            if re.search(regex_lookup[k],piece,re.M):
+                v[keywords.index(k)] = 1
 
 
+        vector_space.append(v)
 
+    V = np.array(vector_space)
 
+    # If name is not found, prepend a dummy string to segments which
+    # refences the whisky name. This is essential for the segmentation algo
+    if V.sum(0)[0] == 0:
+        V = np.vstack(([1,0,0,0,0],V))
+        segments.insert(0,whisky_name)
 
+    return(segments,V)
 
+def relevant_segment_index(V):
+    '''
+    Returns the indices of releveant segments by analysing the vector space
+    representation returned by ``represent()``.
+
+    Here is a brief description of the algorithm to find the relevant segments:
+
+    TODO: Describe the algorithm
+    '''
+    idx = list()
+    for i,v in enumerate(V.cumsum(0)):
+        if np.linalg.norm(V[i]) != 0:
+            idx.append(i)
+            if all(v >= np.ones(V.shape[1])):
+                break
+
+    return idx
