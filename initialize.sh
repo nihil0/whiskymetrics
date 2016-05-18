@@ -22,4 +22,3 @@ sed -i -e 's/Lowlands/Lowland/' -e 's/Highlands/Highland/' distilleries.csv
 # Create database
 sqlite3 whisky.db < dbschema.sql
 
-

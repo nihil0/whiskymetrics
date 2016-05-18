@@ -65,3 +65,7 @@ target/
 
 # Ignore demo_ files
 demo_*
+
+# Some jekyll files may appear
+_*
+
