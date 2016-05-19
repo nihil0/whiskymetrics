@@ -11,7 +11,7 @@ email: neelabh2@gmail.com
 description: > # this means to ignore newlines until "baseurl:"
     A data science project
 
-baseurl: "" # the subpath of your site, e.g. /blog
+baseurl: /WhiskyMetrics # the subpath of your site, e.g. /blog
 url: https://www.github.io/WhiskyMetrics # the base hostname & protocol for your site
 github_username: nihil0
 
