@@ -1,15 +1,9 @@
 ---
 layout: page
-title: About
+title: About WhiskyMetrics
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your Jekyll theme, as well as basic Jekyll usage documentation at [jekyllrb.com](http://jekyllrb.com/)
+This is a project to build a command line tool that gets from [r/Scotch](reddit.com/r/scotch) all reviews of a certain Scotch distillery, whisky or whisky producing region.
 
-You can find the source code for the Jekyll new theme at:
-{% include icon-github.html username="jglovier" %} /
-[jekyll-new](https://github.com/jglovier/jekyll-new)
-
-You can find the source code for Jekyll at
-{% include icon-github.html username="jekyll" %} /
-[jekyll](https://github.com/jekyll/jekyll)
+The ultimate goal of the project is to build a map of single malt Scotch whiskies based on performing some very advanced analytics on review datasets.
