@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 
 #Import required modules
@@ -16,6 +16,7 @@ class WhiskyBot(praw.Reddit):
         Get review text from reddit given post ID or url to reddit post.
         """
         if post_id:
+            # TODO: Exception handling here as well
             submission = self.get_submission(submission_id=post_id)
         elif url:
             submission = self.get_submission(url)
