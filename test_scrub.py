@@ -33,17 +33,25 @@ class TestScrub(unittest.TestCase):
         s = np.array([ 1.,  0., 0.,  0.,  2.,  1.,  0.,  0.,  1.,  0.,  2.])
         self.assertTrue(np.array_equal(V.sum(1),s))
 
-    def test_relevant_segment_index(self): 
-        text = ['foo','bar','name','baz','nose color', 'colour','moo',
-            'heh','finish','tasty','taste finish']
+    def test_relevant_segment_index(self):
+        with open('static/laphroaig_quarter_cask.txt') as f:
+            text = f.read().split('\n\n')
 
-        (segments,V) = scrub.represent(text,'name')
+        (segments,V) = scrub.represent(text,'laphroaig quarter cask')
 
         idx = scrub.relevant_segment_index(V)
 
-        new_text = [text[m] for m in idx]
+        print(idx)
 
-        self.assertListEqual(new_text,['name','nose color','colour','finish','taste finish'])
+        self.assertListEqual(idx,[2,3])
 
+        with open('static/laphroaig_quarter_cask_alt.txt') as f:
+            text = f.read().split('\n\n')
+
+        (segments,V) = scrub.represent(text,'laphroaig quarter cask')
+
+        idx = scrub.relevant_segment_index(V)
+
+        self.assertListEqual(idx,[4,5])
 
 

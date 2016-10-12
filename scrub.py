@@ -14,6 +14,8 @@ import re, nltk
 from nltk.tokenize import wordpunct_tokenize
 from nltk.corpus import stopwords
 import numpy as np
+import csv
+from datetime import datetime
 
 # Add NLTK datadir
 nltk.data.path.append('/l/nltk_data')
@@ -22,12 +24,25 @@ def clean(string):
     '''
     Removes all special characters keeeping only alphanumerics and newlines.
     Also converts everything to lowercase.
+
+    Args Type:
+        string
+
+    Returns Type:
+        string
+
     '''
     return re.sub('[^A-Za-z0-9 \n]+','',string).lower()
 
 def tokenize(string):
     '''
     Returns a list of word tokens after removing stop words
+
+    Args Type:
+        string
+
+    Returns Type:
+        list
     '''
 
     tokens = wordpunct_tokenize(string);
@@ -36,12 +51,19 @@ def tokenize(string):
 
 def represent(segments,whisky_name):
     '''
-    Returns a 5-D vector representation of a list of strings in ``segments``
-    based on the algorithm described below.
-
-    Each element of the vector is a 1 or 0 depending on presence or absence of
-    the following keywords, respectively:
+    Maps each element of the list of strings in ``segments`` to a 5-D vector in {0,1}
+    such that each element of the vector is a 1 or 0 depending on presence or absence 
+    of the following keywords, respectively:
     ``whisky_name, color, nose, taste, finish.``
+
+    Args Type:
+        segments: list of strings where each string represents e.g., a paragraph
+        whisky_name: string
+
+    Returns Type:
+        tuple (segments: list of strings,
+        V: list of numpy vectors)
+
     '''
 
     keywords = ['name','color','nose','taste','finish']
@@ -67,7 +89,7 @@ def represent(segments,whisky_name):
     V = np.array(vector_space)
 
     # If name is not found, prepend a dummy string to segments which
-    # refences the whisky name. This is essential for the segmentation algo
+    # refence the whisky name. This is essential to identify relevant segments.
     if V.sum(0)[0] == 0:
         V = np.vstack(([1,0,0,0,0],V))
         segments.insert(0,whisky_name)
@@ -79,15 +101,70 @@ def relevant_segment_index(V):
     Returns the indices of releveant segments by analysing the vector space
     representation returned by ``represent()``.
 
-    Here is a brief description of the algorithm to find the relevant segments:
+    Sometimes users submit reviews of multiple whiskies in the same comment.
+    It is essential to identify which review block is most relevant to the whisky
+    being analysed. The algorithm proceeds as follows:
 
-    TODO: Describe the algorithm
+    Each column of V is represents the presence/absence of certain keywords in 
+    a segment represented by a row. We first locate the segment which references
+    the name of the whisky. Next, we check if the next keyword is also referenced
+    in the same segment. If yes, we move onto the next keyword, if no, we proceed
+    to look in the next segment. In the end we end up with the minimum  set of all
+    segments which reference the keywords starting from the first one.
+
+    Args:
+        V: numpy array of vectors
+
+    Returns:
+        idx : List
+
     '''
-    idx = list()
-    for i,v in enumerate(V.cumsum(0)):
-        if np.linalg.norm(V[i]) != 0:
-            idx.append(i)
-            if all(v >= np.ones(V.shape[1])):
-                break
+    def idx_search(V,idx):
+        '''Recursion to get the most relevant segments'''
+        if V.size == 0:
+            return idx
+        else:
+            non_zero_row_idx = np.where(V[:,0])[0][0]
+            if not idx:
+                idx.append(non_zero_row_idx)
+            else:
+                idx.append(idx[-1]+non_zero_row_idx)
 
-    return idx
+            return idx_search(np.delete(V[non_zero_row_idx:,:],0,1),idx)
+
+    return list(np.unique(idx_search(V,[])))
+
+
+def transform_csv(input_filename):
+    '''
+    Returns a CSV file which can be directly loaded into the whiskymetrics database.
+    Refer to metadata table in WhiskyDBSchema.sql for the format spec.
+    '''
+    with open(input_filename) as f:
+        with open('out.csv','w+') as f_out:
+            fieldnames = ['post_id','timestamp','author','topic','region','score']
+            wr = csv.DictWriter(f_out,fieldnames=fieldnames)
+            wr.writeheader()
+            r = csv.reader(f)
+
+            for row in r:
+                try:
+                    post_id = row[3].split('/')[6]
+                except IndexError:
+                    continue
+
+                if row[0] != '':
+                    timestamp = datetime.strftime(
+                        datetime.strptime(row[0],"%m/%d/%Y %H:%M:%S"),
+                        "%Y-%m-%d %H:%M:%S")
+                else:
+                    continue
+
+                wr.writerow({
+                    'post_id': post_id,
+                    'timestamp' : timestamp,
+                    'author' : row[2].lower(),
+                    'topic' : row[1].lower(),
+                    'region' : row[5].lower(),
+                    'score' : row[4]
+                    })
