@@ -142,29 +142,24 @@ def transform_csv(input_filename):
     '''
     with open(input_filename) as f:
         with open('out.csv','w+') as f_out:
-            fieldnames = ['post_id','timestamp','author','topic','region','score']
+            fieldnames = ['url','timestamp','author','topic','region','score']
             wr = csv.DictWriter(f_out,fieldnames=fieldnames)
             wr.writeheader()
             r = csv.reader(f)
 
             for row in r:
                 try:
-                    post_id = row[3].split('/')[6]
-                except IndexError:
-                    continue
-
-                if row[0] != '':
                     timestamp = datetime.strftime(
                         datetime.strptime(row[0],"%m/%d/%Y %H:%M:%S"),
                         "%Y-%m-%d %H:%M:%S")
-                else:
+                except ValueError:
                     continue
 
                 wr.writerow({
-                    'post_id': post_id,
+                    'url': row[3],
                     'timestamp' : timestamp,
                     'author' : row[2].lower(),
                     'topic' : row[1].lower(),
                     'region' : row[5].lower(),
-                    'score' : row[4]
+                    'score' : ''.join(row[4].split())
                     })
