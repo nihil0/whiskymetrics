@@ -7,4 +7,4 @@ db:
 	python -m unittest test_whiskydb.py
 
 scrub:
-	python -m unittest test_scrub.py
+	python -m unittest -b test_scrub.py
