@@ -80,11 +80,15 @@ class WhiskyDB():
         elif distillery:
             query="SELECT topic, url FROM metadata WHERE topic like '"+distillery+"%';"
         elif region:
-            query="SELECT topic, url FROM review WHERE region='"+region+"';"
+            query="SELECT topic, url FROM metadata WHERE region='"+region+"';"
         else:
             raise(ValueError,'Missing input!')
 
-        return self.crsr.execute(query)
+        print(query)
+
+        self.crsr.execute(query)
+
+        return self.crsr
 
 
 
