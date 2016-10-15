@@ -2,7 +2,9 @@
 
 
 #Import required modules
-import praw,sqlite3
+import praw, dbconfig
+from urllib.parse import urlparse
+import psycopg2 as pg
 
 class WhiskyBot(praw.Reddit):
     """
@@ -19,7 +21,14 @@ class WhiskyBot(praw.Reddit):
             # TODO: Exception handling here as well
             submission = self.get_submission(submission_id=post_id)
         elif url:
-            submission = self.get_submission(url)
+            if urlparse(url).scheme == 'http':
+                url.replace('http','https')
+            try:
+                submission = self.get_submission(url)
+            except:
+                print('Failed unexpectedly...')
+                return(None)
+
         else:
             raise(ValueError,'No input given!')
 
@@ -37,8 +46,12 @@ class WhiskyDB():
     '''
     Class to interact with WhiskyMetrics' database.
     '''
-    def __init__(self,path_to_db):
-        self.dbconn = sqlite3.connect(path_to_db)
+    def __init__(self):
+        self.dbconn =pg.connect(database=dbconfig.database,
+                user=dbconfig.user,
+                password=dbconfig.password,
+                host=dbconfig.host,
+                port=dbconfig.port)
         self.crsr = self.dbconn.cursor()
 
     def get_post_links(self,name=None,distillery=None,region=None):
@@ -63,11 +76,11 @@ class WhiskyDB():
         '''
 
         if name:
-            query="SELECT name, url FROM review WHERE name='"+name+"';"
+            query="SELECT topic, url FROM metadata WHERE topic='"+name+"';"
         elif distillery:
-            query="SELECT name, url FROM review WHERE name like '"+distillery+"%';"
+            query="SELECT topic, url FROM metadata WHERE topic like '"+distillery+"%';"
         elif region:
-            query="SELECT name, url FROM review WHERE type='"+region+"';"
+            query="SELECT topic, url FROM review WHERE region='"+region+"';"
         else:
             raise(ValueError,'Missing input!')
 
