@@ -1,0 +1,21 @@
+'''
+Config file for Postgresql database
+'''
+
+# database
+database = ''
+
+# user
+user = ''
+
+# passpword
+password=''
+
+# host
+host = ''
+
+# port
+port = ''
+
+
+

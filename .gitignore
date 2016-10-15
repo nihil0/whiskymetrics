@@ -69,3 +69,5 @@ demo_*
 # Some jekyll files may appear
 _*
 
+# keep database config safe
+dbconfig.py
