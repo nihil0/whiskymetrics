@@ -156,10 +156,10 @@ def transform_csv(input_filename):
                     continue
 
                 wr.writerow({
-                    'url': row[3],
+                    'url': row[3].strip(),
                     'timestamp' : timestamp,
-                    'author' : row[2].lower(),
-                    'topic' : row[1].lower(),
-                    'region' : row[5].lower(),
-                    'score' : ''.join(row[4].split())
+                    'author' : row[2].lower().strip(),
+                    'topic' : row[1].lower().strip(),
+                    'region' : row[5].lower().strip(),
+                    'score' : (''.join(row[4].split())).strip()
                     })
