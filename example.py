@@ -52,6 +52,7 @@ for i in review_ids:
                 pass
 
         else:
+            print(cleaned_text)
             print('No keywords found. Skipping...')
 
 

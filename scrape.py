@@ -23,7 +23,8 @@ class WhiskyBot(praw.Reddit):
         elif url:
             if urlparse(url).scheme == 'http':
                 url = url.replace('http','https')
-                submission = self.get_submission(url)
+
+            submission = self.get_submission(url)
 
         else:
             raise(ValueError,'No input given!')
