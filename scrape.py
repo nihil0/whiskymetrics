@@ -22,12 +22,8 @@ class WhiskyBot(praw.Reddit):
             submission = self.get_submission(submission_id=post_id)
         elif url:
             if urlparse(url).scheme == 'http':
-                url.replace('http','https')
-            try:
+                url = url.replace('http','https')
                 submission = self.get_submission(url)
-            except:
-                print('Failed unexpectedly...')
-                return(None)
 
         else:
             raise(ValueError,'No input given!')
@@ -54,7 +50,7 @@ class WhiskyDB():
                 port=dbconfig.port)
         self.crsr = self.dbconn.cursor()
 
-    def get_post_links(self,name=None,distillery=None,region=None):
+    def get_post_links(self,name=None,distillery=None,region=None,review_id=None):
         '''
         Returns a generator of urls for all reviews that match one of the input
         criteria.
@@ -67,28 +63,45 @@ class WhiskyDB():
             region: Any of the main whisky producing regions of Scotland. E.g.,
                 Islay, Highland, Campbeltown etc. Remove the s from Highlands
                 and Lowlands
+            review_id: primary key
 
         Returns:
-            A generator of names and urls
+            A generator of tuples (review_id, topic, url)
 
         Raises:
             ValueError id no inputs are given
         '''
 
         if name:
-            query="SELECT topic, url FROM metadata WHERE topic='"+name+"';"
+            query="SELECT review_id, topic, url FROM metadata WHERE topic='"+name+"';"
         elif distillery:
-            query="SELECT topic, url FROM metadata WHERE topic like '"+distillery+"%';"
+            query="SELECT review_id, topic, url FROM metadata WHERE topic like '"+distillery+"%';"
         elif region:
-            query="SELECT topic, url FROM metadata WHERE region='"+region+"';"
+            query="SELECT review_id, topic, url FROM metadata WHERE region='"+region+"';"
+        elif review_id:
+            query="SELECT review_id, topic, url FROM metadata WHERE review_id="+str(review_id)+";"
         else:
             raise(ValueError,'Missing input!')
 
-        print(query)
-
         self.crsr.execute(query)
 
-        return self.crsr
+        return (m for m in self.crsr)
 
+
+    def get_all_review_id(self):
+        ''' Returns a generator of primary key column of the metadata table'''
+        self.crsr.execute('SELECT review_id from metadata;')
+
+        return (m[0] for m in self.crsr)
+
+    def put_review_text(self,review_id,text):
+        ''' Inserts review text into the database referenced by a review_id '''
+
+        query = "INSERT INTO review VALUES ({},'{}');".format(review_id,text)
+        self.crsr.execute(query)
+        self.dbconn.commit()
+
+    def __del__(self):
+        self.dbconn.close()
 
 
