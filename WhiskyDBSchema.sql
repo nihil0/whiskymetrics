@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS  metadata (
     );
 
 CREATE TABLE IF NOT EXISTS review (
-    review_id integer references metadata(review_id),
+    review_id integer UNIQUE references metadata(review_id),
     review_text text
     );
 
