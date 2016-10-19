@@ -97,8 +97,7 @@ class WhiskyDB():
     def put_review_text(self,review_id,text):
         ''' Inserts review text into the database referenced by a review_id '''
 
-        query = "INSERT INTO review VALUES ({},'{}');".format(review_id,text)
-        self.crsr.execute(query)
+        self.crsr.execute("INSERT INTO review VALUES (%s,%s);",(review_id,text))
         self.dbconn.commit()
 
     def __del__(self):
