@@ -34,24 +34,22 @@ class TestScrub(unittest.TestCase):
         self.assertTrue(np.array_equal(V.sum(1),s))
 
     def test_relevant_segment_index(self):
-        with open('static/laphroaig_quarter_cask.txt') as f:
-            text = f.read().split('\n\n')
+        V = np.array([[1,0,0,0,0],[0,0,0,0,0]])
 
-        (segments,V) = scrub.represent(text,'laphroaig quarter cask')
+        self.assertFalse(scrub.relevant_segment_index(V))
 
-        idx = scrub.relevant_segment_index(V)
+        V = np.array([[ 0.,  0.,  0.,  0.,  0.],
+        [ 0.,  0.,  0.,  0.,  0.],
+        [ 0.,  0.,  1.,  0.,  0.],
+        [ 0.,  0.,  0.,  1.,  0.],
+        [ 0.,  0.,  0.,  0.,  1.],
+        [ 0.,  0.,  0.,  0.,  0.],
+        [ 0.,  0.,  0.,  0.,  0.],
+        [ 1.,  0.,  0.,  0.,  0.],
+        [ 0.,  0.,  1.,  0.,  0.],
+        [ 0.,  0.,  0.,  1.,  0.],
+        [ 0.,  0.,  0.,  0.,  1.],
+        [ 0.,  0.,  0.,  0.,  0.]])
 
-        print(idx)
-
-        self.assertListEqual(idx,[2,3])
-
-        with open('static/laphroaig_quarter_cask_alt.txt') as f:
-            text = f.read().split('\n\n')
-
-        (segments,V) = scrub.represent(text,'laphroaig quarter cask')
-
-        idx = scrub.relevant_segment_index(V)
-
-        self.assertListEqual(idx,[4,5])
-
+        self.assertListEqual(scrub.relevant_segment_index(V),[7,8,9,10])
 

@@ -124,7 +124,11 @@ def relevant_segment_index(V):
         if V.size == 0:
             return idx
         else:
-            non_zero_row_idx = np.where(V[:,0])[0][0]
+            try:
+                non_zero_row_idx = np.where(V[:,0])[0][0]
+            except IndexError:
+                non_zero_row_idx = 0
+
             if not idx:
                 idx.append(non_zero_row_idx)
             else:
@@ -132,7 +136,11 @@ def relevant_segment_index(V):
 
             return idx_search(np.delete(V[non_zero_row_idx:,:],0,1),idx)
 
-    return list(np.unique(idx_search(V,[])))
+    if not any(V[:,1:].sum(0)):
+    # Return None if all keywords are not present in text
+        return None
+    else:
+        return list(np.unique(idx_search(V,[])))
 
 
 def transform_csv(input_filename):
