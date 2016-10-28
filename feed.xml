@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://0.0.0.0:4000/WhiskyMetrics/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.0">Jekyll</generator><link href="http://0.0.0.0:4000/WhiskyMetrics/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/WhiskyMetrics/" rel="alternate" type="text/html" /><updated>2016-10-28T09:34:37+00:00</updated><id>http://0.0.0.0:4000/WhiskyMetrics//</id><title type="html">WhiskyMetrics</title><subtitle>Updates and experiments on the WhiskyMetrics project.</subtitle><entry><title type="html">Generating Wordclouds from Collections of Reviews</title><link href="http://0.0.0.0:4000/WhiskyMetrics/2016/10/27/word-clouds/" rel="alternate" type="text/html" title="Generating Wordclouds from Collections of Reviews" /><published>2016-10-27T10:00:00+00:00</published><updated>2016-10-27T10:00:00+00:00</updated><id>http://0.0.0.0:4000/WhiskyMetrics/2016/10/27/word-clouds</id><content type="html" xml:base="http://0.0.0.0:4000/WhiskyMetrics/2016/10/27/word-clouds/">&lt;h1 id=&quot;creating-a-word-cloud-from-whisky-reviews&quot;&gt;Creating a Word Cloud from Whisky Reviews&lt;/h1&gt;
+<?xml version="1.0" encoding="utf-8"?><?xml-stylesheet type="text/xml" href="http://0.0.0.0:4000/WhiskyMetrics/feed.xslt.xml"?><feed xmlns="http://www.w3.org/2005/Atom"><generator uri="http://jekyllrb.com" version="3.3.0">Jekyll</generator><link href="http://0.0.0.0:4000/WhiskyMetrics/feed.xml" rel="self" type="application/atom+xml" /><link href="http://0.0.0.0:4000/WhiskyMetrics/" rel="alternate" type="text/html" /><updated>2016-10-28T10:28:27+00:00</updated><id>http://0.0.0.0:4000/WhiskyMetrics//</id><title type="html">WhiskyMetrics</title><subtitle>Updates and experiments on the WhiskyMetrics project.</subtitle><entry><title type="html">Generating Wordclouds from Collections of Reviews</title><link href="http://0.0.0.0:4000/WhiskyMetrics/2016/10/27/word-clouds/" rel="alternate" type="text/html" title="Generating Wordclouds from Collections of Reviews" /><published>2016-10-27T10:00:00+00:00</published><updated>2016-10-27T10:00:00+00:00</updated><id>http://0.0.0.0:4000/WhiskyMetrics/2016/10/27/word-clouds</id><content type="html" xml:base="http://0.0.0.0:4000/WhiskyMetrics/2016/10/27/word-clouds/">&lt;h1 id=&quot;creating-a-word-cloud-from-whisky-reviews&quot;&gt;Creating a Word Cloud from Whisky Reviews&lt;/h1&gt;
 
 &lt;h3 id=&quot;connect-to-the-database&quot;&gt;Connect to the database&lt;/h3&gt;
 
@@ -54,7 +54,7 @@
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;p&gt;&lt;img src=&quot;http://0.0.0.0:4000/WhiskyMetrics/img/WordCloud_files/WordCloud_7_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/WhiskyMetrics/img/WordCloud_files/WordCloud_7_0.png&quot; alt=&quot;png&quot; /&gt;&lt;/p&gt;
 
 &lt;p&gt;No surprises there! ;)&lt;/p&gt;
 
