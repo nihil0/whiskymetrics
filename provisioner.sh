@@ -15,6 +15,3 @@ virtualenv -p python3 ~/.virtualenv/whiskymetrics
 
 # Clone repo
 git clone https://github.com/nihil0/WhiskyMetrics.git
-
-# Enter virtualenv
-source ~/.virtualenv/whiskymetrics/bin/activate
