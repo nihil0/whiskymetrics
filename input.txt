@@ -1,6 +1,0 @@
-#
-# Put the whiskies you want analysed in this file. 
-# One per line
-#
-bowmore 12
-
