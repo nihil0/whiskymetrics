@@ -13,6 +13,8 @@ The general ETL workflow is as follows:
 import requests
 from datetime import date, datetime
 import pandas as pd
+import numpy as np
+import codecs
 
 def download_file():
     """ Downloads review data from Google Sheets as CSV. """
@@ -23,8 +25,8 @@ def download_file():
 
     filename = date.today().strftime("%Y-%m-%d-review.csv")
 
-    with open(filename,'w+') as f:
-        f.write(resp.text)
+    with codecs.open(filename, 'w+', "utf-8") as file:
+        file.write(resp.text)
 
 def transform(filename):
     """ Returns a list of tuples representing the 'metadata' table in the
@@ -38,16 +40,16 @@ def transform(filename):
     tbl = tbl[tbl.columns[0:6]]
 
     # Convert text to lower case and strip whitespace
-    tbl['Whisky Name'] = tbl['Whisky Name'].map(lambda x: x.strip().lower())
-    tbl['Reviewer Username'] = tbl['Reviewer Username'].map(lambda x: x.strip())
-    tbl['Region'] = tbl['Region'].map(lambda x: x.strip().lower())
+    tbl['Whisky Name'] = tbl['Whisky Name'].replace(np.nan, "", regex=True).map(lambda x: x.strip().lower())
+    tbl['Reviewer Username'] = tbl['Reviewer Username'].replace(np.nan, "", regex=True).map(lambda x: x.strip())
+    tbl['Region'] = tbl['Region'].replace(np.nan, "", regex=True).map(lambda x: x.strip().lower())
 
     # Filter out single malts
     tbl = tbl.loc[tbl['Region'].isin(('highland','lowland','campbeltown','island','islay','japan','taiwan','india','sweden','finland'))]
 
     # Select only those whiskies with over 10 reviews
     rev_count = tbl['Whisky Name'].value_counts()
-    whisky_list = rev_count[rev_count >=10].index
+    whisky_list = rev_count[rev_count >= 10].index
     tbl = tbl.loc[tbl['Whisky Name'].isin(whisky_list)]
 
     # Change timestamp format to ISO 8601
@@ -56,7 +58,7 @@ def transform(filename):
         if pd.isnull(time_string):
             return ''
         else:
-            return datetime.strptime(time_string,'%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%dT%H:%M:%S')
+            return datetime.strptime(time_string, '%m/%d/%Y %H:%M:%S').strftime('%Y-%m-%dT%H:%M:%S')
 
     tbl['Timestamp'] = tbl['Timestamp'].map(format_timestamp)
 
