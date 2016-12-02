@@ -18,11 +18,8 @@ def test_download_file():
 
 def test_transform():
     tbl = etl.transform(os.path.join(static_dir_path, "review_sample.csv"))
-    tbl_compare = pd.read_csv(os.path.join(static_dir_path, "transformed_reviews.csv"))
+    tbl_compare = pd.read_csv(os.path.join(static_dir_path, "transformed_reviews.csv"), index_col=0)
     assert_frame_equal(tbl, tbl_compare)
 
-
-
-
-
-
+def test_load():
+    pass
