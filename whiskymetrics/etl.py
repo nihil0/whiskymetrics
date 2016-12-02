@@ -15,9 +15,11 @@ from datetime import date, datetime
 import pandas as pd
 import numpy as np
 import codecs
+import os 
 
 def download_file():
     """ Downloads review data from Google Sheets as CSV. """
+    print(os.getcwd())
     file_id = "1X1HTxkI6SqsdpNSkSSivMzpxNT-oeTbjFFDdEkXD30o"
     url = "https://docs.google.com/spreadsheets/d/{0}/export?format=csv".format(file_id)
 
