@@ -1,8 +1,7 @@
-#!/usr/bin/env python
 # coding: utf-8
 """
     ===================
-    WhiskyMetrics.scrub
+    whiskymetrics.scrub
     ===================
 
     Functions for cleaning raw review data returned by :class:`scrape.WhiskyBot`
@@ -17,9 +16,6 @@ import numpy as np
 import csv
 from datetime import datetime
 
-# Add NLTK datadir
-nltk.data.path.append('/l/nltk_data')
-
 def clean(string):
     '''
     Removes all special characters keeeping only alphanumerics and newlines.
@@ -32,7 +28,7 @@ def clean(string):
         string
 
     '''
-    return re.sub('[^A-Za-z0-9 \n]+','',string).lower()
+    return re.sub('[^A-Za-z0-9 \n]+', '', string).lower()
 
 def tokenize(string):
     '''
@@ -45,14 +41,14 @@ def tokenize(string):
         list
     '''
 
-    tokens = wordpunct_tokenize(string);
+    tokens = wordpunct_tokenize(string)
     stop_words = stopwords.words('english')
     return [word for word in tokens if word not in stop_words]
 
 def represent(segments,whisky_name):
     '''
     Maps each element of the list of strings in ``segments`` to a 5-D vector in {0,1}
-    such that each element of the vector is a 1 or 0 depending on presence or absence 
+    such that each element of the vector is a 1 or 0 depending on presence or absence
     of the following keywords, respectively:
     ``whisky_name, color, nose, taste, finish.``
 
@@ -66,7 +62,7 @@ def represent(segments,whisky_name):
 
     '''
 
-    keywords = ['name','color','nose','taste','finish']
+    keywords = ['name', 'color', 'nose', 'taste', 'finish']
 
     regex_lookup = {'name':whisky_name,
              'color':'(colo(u)?r|appearance)',
@@ -80,7 +76,7 @@ def represent(segments,whisky_name):
     for piece in segments:
         v = np.zeros(len(keywords))
         for k in keywords:
-            if re.search(regex_lookup[k],piece,re.M):
+            if re.search(regex_lookup[k], piece, re.M):
                 v[keywords.index(k)] = 1
 
 
@@ -141,33 +137,3 @@ def relevant_segment_index(V):
         return None
     else:
         return list(np.unique(idx_search(V,[])))
-
-
-def transform_csv(input_filename):
-    '''
-    Returns a CSV file which can be directly loaded into the whiskymetrics database.
-    Refer to metadata table in WhiskyDBSchema.sql for the format spec.
-    '''
-    with open(input_filename) as f:
-        with open('out.csv','w+') as f_out:
-            fieldnames = ['url','timestamp','author','topic','region','score']
-            wr = csv.DictWriter(f_out,fieldnames=fieldnames)
-            wr.writeheader()
-            r = csv.reader(f)
-
-            for row in r:
-                try:
-                    timestamp = datetime.strftime(
-                        datetime.strptime(row[0],"%m/%d/%Y %H:%M:%S"),
-                        "%Y-%m-%d %H:%M:%S")
-                except ValueError:
-                    continue
-
-                wr.writerow({
-                    'url': row[3].strip(),
-                    'timestamp' : timestamp,
-                    'author' : row[2].lower().strip(),
-                    'topic' : row[1].lower().strip(),
-                    'region' : row[5].lower().strip(),
-                    'score' : (''.join(row[4].split())).strip()
-                    })

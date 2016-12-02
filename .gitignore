@@ -42,6 +42,7 @@ htmlcov/
 nosetests.xml
 coverage.xml
 *,cover
+.noseids
 
 # Translations
 *.mo
@@ -72,4 +73,5 @@ _*
 # jupyter notebooks
 *.ipynb
 
-# database config
+# VS Code
+.vscode/
