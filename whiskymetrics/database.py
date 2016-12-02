@@ -1,10 +1,11 @@
 """WhiskyMetrics Database Module
 
-This module implements classes to interact with the new Microsoft Azure SQL
+This module implements classes to interact with a Microsoft Azure SQL
 database.
 
-Before using, ensure that the azuredbconf.py_template file is renamed as .py and
-that the variables within it are set to the appropriate values.
+Before using, ensure that you place a config file `$HOME/.whiskymetrics/config.ini` based
+on the template config.ini_template in the project directory. 
+
 
 """
 from configparser import ConfigParser
@@ -40,26 +41,30 @@ def test_connection():
 
     print("Connection successsful!")
 
-
-
-
 # Create table objects
 def create_metadata():
     """ Returns a SQLAlchemy metadata object with tables specified as below """
     metadata = MetaData()
 
     # Distillery table
-    distillery_col_names = ["id","Distillery","Body","Sweetness","Smoky","Medicinal","Tobacco","Honey","Spicy","Winey","Nutty","Malty","Fruity","Floral","Postcode","Latitude","Longitude"]
-    distillery_col_types = [Integer,String,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,Integer,String,String,String]
-    columns = [Column(name,coltype) for name, coltype in zip(distillery_col_names,distillery_col_types)]
+    distillery_col_names = ["id", "Distillery", "Body", "Sweetness", "Smoky", "Medicinal", "Tobacco",
+                            "Honey", "Spicy", "Winey", "Nutty", "Malty", "Fruity", "Floral", "Postcode", "Latitude", "Longitude"]
+    distillery_col_types = [Integer, String, Integer, Integer, Integer, Integer, Integer,
+                            Integer, Integer, Integer, Integer, Integer, Integer, Integer, String, String, String]
+    columns = [Column(name, coltype) for name, coltype in zip(
+        distillery_col_names, distillery_col_types)]
     columns[0].primary_key = True
-    distillery = Table("distillery", metadata,*columns)
-
-    review_col_names = ["id","timestamp","whisky_name","user","link","rating","region"]
-    review_col_types = [Integer,DateTime,String,String,String,Integer,String]
-    columns = [Column(name,coltype) for name, coltype in zip(review_col_names,review_col_types)]
+    distillery = Table("distillery", metadata, *columns)
+    
+    # Review table
+    review_col_names = ["id", "timestamp", "whisky_name",
+                        "user", "link", "rating", "region"]
+    review_col_types = [Integer, DateTime,
+                        String, String, String, Integer, String]
+    columns = [Column(name, coltype)
+               for name, coltype in zip(review_col_names, review_col_types)]
     columns[0].primary_key = True
-    distillery = Table("review", metadata,*columns)
+    distillery = Table("review", metadata, *columns)
 
 
     return metadata
