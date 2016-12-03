@@ -9,7 +9,7 @@ on the template config.ini_template in the project directory.
 
 """
 from configparser import ConfigParser
-from sqlalchemy import create__engine
+from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, String, MetaData, Integer, DateTime
 from sqlalchemy.exc import DBAPIError
 from urllib.parse import quote_plus
@@ -66,7 +66,6 @@ def create_metadata():
     columns[0].primary_key = True
     distillery = Table("review", metadata, *columns)
 
-
     return metadata
 
 def create_tables():
@@ -74,15 +73,7 @@ def create_tables():
     metadata = create_metadata()
     metadata.create_all(_engine)
 
-'''class WhiskyDB():
-    """ Class to interact with the WhiskyMetrics Database"""
-    def __init__(self):
-        
-'''
-        #self.dbconn = pyodbc.connect('DRIVER={ODBC Driver 13 for SQL Server};SERVER='+azuredbconfig.server+';DATABASE='+azuredbconfig.database+';UID='+azuredbconfig.username+';PWD='+ azuredbconfig.password)
-        #self.crsr = dbconn.cursor()
-
-
-#params = urllib.quote_plus("DRIVER={SQL Server Native Client 10.0};SERVER=dagger;DATABASE=test;UID=user;PWD=password")
-
-#_engine = create__engine("mssql+pyodbc:///?odbc_connect=%s" % params)
+def get_connection():
+    """ Returns a connection object to the Azure SQL database """
+    return _engine.connect()
+    
