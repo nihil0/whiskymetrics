@@ -10,8 +10,8 @@ from pandas.util.testing import assert_frame_equal
 dir_path = os.getcwd()
 static_dir_path = os.path.join(os.path.dirname(os.path.abspath(__file__)),'static')
 
-def test_download_file():
-    etl.download_file()
+def test_download_review_file():
+    etl.download_review_file()
     filename = date.today().strftime("%Y-%m-%d-review.csv")
     assert os.path.isfile(os.path.join(dir_path, filename))
     os.remove(os.path.join(dir_path, filename))

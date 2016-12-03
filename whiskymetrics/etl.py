@@ -17,7 +17,7 @@ import numpy as np
 import codecs
 import os 
 
-def download_file():
+def download_review_file():
     """ Downloads review data from Google Sheets as CSV. """
     print(os.getcwd())
     file_id = "1X1HTxkI6SqsdpNSkSSivMzpxNT-oeTbjFFDdEkXD30o"
