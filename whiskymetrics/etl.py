@@ -19,7 +19,6 @@ import os
 
 def download_review_file():
     """ Downloads review data from Google Sheets as CSV. """
-    print(os.getcwd())
     file_id = "1X1HTxkI6SqsdpNSkSSivMzpxNT-oeTbjFFDdEkXD30o"
     url = "https://docs.google.com/spreadsheets/d/{0}/export?format=csv".format(file_id)
 
@@ -27,7 +26,7 @@ def download_review_file():
 
     filename = date.today().strftime("%Y-%m-%d-review.csv")
 
-    with codecs.open(filename, 'w+', "utf-8") as file:
+    with codecs.open(os.path.join(os.environ['HOME'], ".whiskymetrics", filename), 'w+', "utf-8") as file:
         file.write(resp.text)
 
 def transform(filename):
