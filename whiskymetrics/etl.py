@@ -11,6 +11,7 @@ The general ETL workflow is as follows:
     Load: Load into Azure SQL database with schema described in 'whiskymetrics-schema.sql'
 """
 import requests
+from whiskymetrics import WMDIR
 import whiskymetrics.database as database
 from datetime import date, datetime
 import pandas as pd
@@ -27,7 +28,7 @@ def download_review_file():
 
     filename = date.today().strftime("%Y-%m-%d-review.csv")
 
-    with codecs.open(os.path.join(os.environ['HOME'], ".whiskymetrics", filename), 'w+', "utf-8") as file:
+    with codecs.open(os.path.join(WMDIR, filename), 'w+', "utf-8") as file:
         file.write(resp.text)
 
 def transform(filename):
@@ -66,10 +67,10 @@ def transform(filename):
 
     return tbl
 
-    def load(table, df):
-        """ Bulk inserts the data frame `df` into the `sqlalchemy.Table` object `table` """
-        conn = database.get_connection()
-        conn.execute(table.insert(),df.to_dict(orient="rec"))
+def load(table, df):
+    """ Bulk inserts the data frame `df` into the `sqlalchemy.Table` object `table` """
+    conn = database.get_connection()
+    conn.execute(table.insert(),df.to_dict(orient="rec"))
         
 
 

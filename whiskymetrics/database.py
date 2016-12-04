@@ -8,6 +8,7 @@ on the template config.ini_template in the project directory.
 
 
 """
+from whiskymetrics import WMDIR
 from configparser import ConfigParser
 from sqlalchemy import create_engine
 from sqlalchemy import Table, Column, String, MetaData, Integer, DateTime
@@ -17,12 +18,12 @@ import os, whiskymetrics
 
 # Test is config file exists in $HOME/.whiskymetrics
 try:
-    open(os.path.join(os.environ['HOME'], ".whiskymetrics", "config.ini")).read()
+    open(os.path.join(WMDIR, "config.ini")).read()
 except IOError:
     print("Config file $HOME/.whiskymetrics/config.ini not found.")
 else:
     config = ConfigParser()
-    config.read(os.path.join(os.environ['HOME'], ".whiskymetrics", "config.ini"))
+    config.read(os.path.join(WMDIR, "config.ini"))
     conn_string = "DRIVER={{ODBC Driver 13 for SQL Server}};SERVER={0};DATABASE={1};UID={2};PWD={3}".format(
         config['DATABASE']['server'],
         config['DATABASE']['database'],
