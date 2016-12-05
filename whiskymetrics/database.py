@@ -11,7 +11,7 @@ on the template config.ini_template in the project directory.
 from whiskymetrics import WMDIR
 from configparser import ConfigParser
 from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, String, MetaData, Integer, DateTime
+from sqlalchemy import Table, Column, String, MetaData, Integer, DateTime, Text
 from sqlalchemy.exc import DBAPIError
 from urllib.parse import quote_plus
 import os, whiskymetrics
@@ -66,6 +66,10 @@ def create_metadata():
                for name, coltype in zip(review_col_names, review_col_types)]
     columns[0].primary_key = True
     distillery = Table("review", metadata, *columns)
+
+    # Text Table
+    text_col_names = ["id", "reddit_fullname", "review_text"]
+    text_col_types = [Integer,String(32),Text]
 
     return metadata
 
