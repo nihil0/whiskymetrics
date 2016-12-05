@@ -11,7 +11,7 @@ on the template config.ini_template in the project directory.
 from whiskymetrics import WMDIR
 from configparser import ConfigParser
 from sqlalchemy import create_engine
-from sqlalchemy import Table, Column, String, MetaData, Integer, DateTime, Text
+from sqlalchemy import Table, Column, String, MetaData, Integer, DateTime, Text, ForeignKey
 from sqlalchemy.exc import DBAPIError
 from urllib.parse import quote_plus
 import os, whiskymetrics
@@ -55,7 +55,7 @@ def create_metadata():
     columns = [Column(name, coltype) for name, coltype in zip(
         distillery_col_names, distillery_col_types)]
     columns[0].primary_key = True
-    distillery = Table("distillery", metadata, *columns)
+    Table("distillery", metadata, *columns)
     
     # Review table
     review_col_names = ["id", "timestamp", "whisky_name",
@@ -65,11 +65,15 @@ def create_metadata():
     columns = [Column(name, coltype)
                for name, coltype in zip(review_col_names, review_col_types)]
     columns[0].primary_key = True
-    distillery = Table("review", metadata, *columns)
+    Table("review", metadata, *columns)
 
     # Text Table
     text_col_names = ["id", "reddit_fullname", "review_text"]
-    text_col_types = [Integer,String(32),Text]
+    text_col_types = [Integer,String,Text]
+    columns = [Column(name, coltype)
+               for name, coltype in zip(text_col_names, text_col_types)]
+    columns[0].foreign_keys.add(ForeignKey("review.id"))
+    Table("review_text", metadata, *columns)
 
     return metadata
 
